@@ -58,6 +58,19 @@ class PublicMethods(object):
 
     @staticmethod
     @http_exception_handler
+    def get_valid_market_order_types():
+        """
+        Returns a list of valid market order types which can be placed onto the Independent Reserve exchange platform.
+
+        :return: list
+
+        ["MarketBid","MarketOffer"]
+        """
+        response = requests.get("https://api.independentreserve.com/Public/GetValidMarketOrderTypes")
+        return response
+
+    @staticmethod
+    @http_exception_handler
     def get_valid_transaction_types():
         """
         Returns a list of valid transaction types.
