@@ -9,9 +9,9 @@ def http_exception_handler(f):
     :param f: function being wrapped
     :return:
     """
-    def wrapper():
+    def wrapper(*args, **kwargs):
         try:
-            response = f()
+            response = f(*args, **kwargs)
             response.raise_for_status()
             return response.json()
         except HTTPError as error:
