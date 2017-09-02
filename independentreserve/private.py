@@ -117,7 +117,7 @@ class PrivateMethods(Authentication):
             url,
             'apiKey=' + self.key,
             'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code)
+            'primaryCurrencyCode=' + str(primary_currency_code),
             'secondaryCurrencyCode=' + str(secondary_currency_code),
             'orderType=' + str(order_type),
             'volume=' + str(volume)
