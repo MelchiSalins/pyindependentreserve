@@ -9,3 +9,5 @@ Ensure that the contentType of the your JSON POST request is set to 'application
 Fiat currency amounts cannot have more than 2 decimal places, and XBT amounts cannot have more than 8 decimal places.
 """
 from .public import *
+from .authentication import *
+from .private import *
