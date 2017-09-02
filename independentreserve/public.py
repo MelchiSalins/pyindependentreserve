@@ -120,8 +120,8 @@ class PublicMethods(object):
 
         """
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetMarketSummary?\
-            primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(primary_currency_code, secondary_currency_code))
+            "https://api.independentreserve.com/Public/GetMarketSummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(
+                primary_currency_code, secondary_currency_code))
         return response
 
     @staticmethod
@@ -166,18 +166,18 @@ class PublicMethods(object):
         }
         """
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetOrderBook?\
-            primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(primary_currency_code, secondary_currency_code))
+            "https://api.independentreserve.com/Public/GetOrderBook?primaryCurrencyCode={0}&secondaryCurrencyCode={1}"
+                .format(primary_currency_code, secondary_currency_code))
         return response
 
     @staticmethod
     @http_exception_handler
-    def get_trade_history_summary(primary_currency_code="Xbr", secondary_currency_code="Aud", hours="240"):
+    def get_trade_history_summary(primary_currency_code="Xbt", secondary_currency_code="Aud", hours="240"):
         """
         Returns summarised historical trading data for a given currency pair. Data is summarised into 1 hour intervals.
 
-        :param primaryCurrencyCode: The digital currency for which to retrieve trade history. Must be a valid primary currency, which can be checked via the GetValidPrimaryCurrencyCodes method.
-        :param secondaryCurrencyCode: The fiat currency in which to retrieve trade history. Must be a valid secondary currency, which can be checked via the GetValidSecondaryCurrencyCodes method.
+        :param primary_currency_code: The digital currency for which to retrieve trade history. Must be a valid primary currency, which can be checked via the GetValidPrimaryCurrencyCodes method.
+        :param secondary_currency_code: The fiat currency in which to retrieve trade history. Must be a valid secondary currency, which can be checked via the GetValidSecondaryCurrencyCodes method.
         :return: dict
 
         Notes
@@ -226,16 +226,14 @@ class PublicMethods(object):
         """
 
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetTradeHistorySummary?\
-            primaryCurrencyCode={0}\
-            &secondaryCurrencyCode={1}&\
-            numberOfHoursInThePastToRetrieve={2}".format(primary_currency_code, secondary_currency_code, hours)
+            "https://api.independentreserve.com/Public/GetTradeHistorySummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfHoursInThePastToRetrieve={2}".format(
+                primary_currency_code, secondary_currency_code, hours)
         )
         return response
 
     @staticmethod
     @http_exception_handler
-    def get_recent_trades(primary_currency_code="Xbr", secondary_currency_code="Aud", number_of_trades=50):
+    def get_recent_trades(primary_currency_code="Xbt", secondary_currency_code="Aud", number_of_trades=50):
         """
 
         :param primary_currency_code: The digital currency for which to retrieve recent trades.
@@ -285,10 +283,8 @@ class PublicMethods(object):
         """
 
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetRecentTrades?\
-            primaryCurrencyCode={0}&\
-            secondaryCurrencyCode={1}&\
-            numberOfRecentTradesToRetrieve={2}".format(primary_currency_code, secondary_currency_code, number_of_trades)
+            "https://api.independentreserve.com/Public/GetRecentTrades?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfRecentTradesToRetrieve={2}".format(
+                primary_currency_code, secondary_currency_code, number_of_trades)
         )
         return response
 
