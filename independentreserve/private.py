@@ -139,6 +139,56 @@ class PrivateMethods(Authentication):
 
         return response
 
+    @http_exception_handler
+    def cancel_order(self, order_guid):
+        """
+        Cancels a previously placed order.
+
+        Notes
+
+        The order must be in either 'Open' or 'PartiallyFilled' status to be valid for cancellation.
+        You can retrieve list of Open and Partially Filled orders via the GetOpenOrders method.
+        You can also check an individual order's status by calling the GetOrderDetails method.
+
+        :param order_guid: The guid of currently open or partially filled order.
+        :return: dict
+
+        {
+            "CreatedTimestampUtc":"2014-08-05T06:42:11.3032208Z",
+            "OrderGuid":"719c495c-a39e-4884-93ac-280b37245037",
+            "Price":485.76,
+            "PrimaryCurrencyCode":"Xbt",
+            "ReservedAmount":0.358,
+            "SecondaryCurrencyCode":"Usd",
+            "Status":"Cancelled",
+            "Type":"LimitOffer",
+            "VolumeFilled":0,
+            "VolumeOrdered":0.358
+        }
+        """
+
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/CancelOrder"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'orderGuid=' + str(order_guid)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("orderGuid", str(order_guid))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
 
     @http_exception_handler
     def get_open_orders(self, primary_currency_code="Xbt", secondary_currency_code="Aud", page_index=1, page_size=10):
