@@ -523,3 +523,60 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+
+    @http_exception_handler
+    def get_digital_currency_deposit_addresses(self, primary_currency_code="Xbt", page_index=1, page_size=50):
+        """
+        Retrieves a page of digital currency deposit addresses which have been assigned to your account.
+
+        :param primary_currency_code: The digital currency to generate deposit address for.
+        :param page_index: The page index. Must be greater or equal to 1
+        :param page_size: Must be greater or equal to 1 and less than or equal to 50.
+                          If a number greater than 50 is specified, then 50 will be used.
+        :return: dict
+
+        {
+            "PageSize": 10,
+            "TotalItems": 10,
+            "TotalPages": 1
+            "Data": [
+                    {
+                        "DepositAddress": "1CxrjaGvVLgXwi1s1d9d62hrCVLU83nHpX",
+                        "LastCheckedTimestampUtc": "2014-07-24T11:23:48.8693053Z",
+                        "NextUpdateTimestampUtc": "2014-07-25T11:23:48.8693053Z"
+                    },
+                    // ...
+                    {
+                        "DepositAddress":"12a7FbBzSGvJd36wNesAxAksLXMWm4oLUJ",
+                        "LastCheckedTimestampUtc":"2014-05-05T09:35:22.4032405Z",
+                        "NextUpdateTimestampUtc":"2014-05-05T09:45:22.4032405Z"
+                    }
+            ]
+        }
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetDigitalCurrencyDepositAddresses"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'primaryCurrencyCode=' + str(primary_currency_code),
+            'pageIndex=' + str(page_index),
+            'pageSize=' + str(page_size)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("primaryCurrencyCode", str(primary_currency_code)),
+            ("pageIndex", str(page_index)),
+            ("pageSize", str(page_size))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
