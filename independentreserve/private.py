@@ -690,3 +690,69 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+
+    @http_exception_handler
+    def get_trades(self, page_index=1, page_size=50):
+        """
+        Retrieves a page of a specified size, containing trades which were executed against your orders.
+
+        :param page_index: The page index. Must be greater or equal to 1
+        :param page_size: Must be greater or equal to 1 and less than or equal to 50.
+                          If a number greater than 50 is specified, then 50 will be used.
+        :return:
+
+        {
+          "Data": [
+            {
+              "TradeGuid": "593e609d-041a-4f46-a41d-2cb8e908973f",
+              "TradeTimestampUtc": "2014-12-16T03:44:19.2187707Z",
+              "OrderGuid": "8bf851a3-76d2-439c-945a-93367541d467",
+              "OrderType": "LimitBid",
+              "OrderTimestampUtc": "2014-12-16T03:43:36.7423769Z",
+              "VolumeTraded": 0.5,
+              "Price": 410.0,
+              "PrimaryCurrencyCode": "Xbt",
+              "SecondaryCurrencyCode": "Usd"
+            },
+            // ...
+            {
+              "TradeGuid": "13c1e71c-bfb4-452c-b13e-e03535f98b09",
+              "TradeTimestampUtc": "2014-12-11T11:37:42.2089564Z",
+              "OrderGuid": "1ce88acf-6013-4867-b58d-77f0e41ec475",
+              "OrderType": "LimitBid",
+              "OrderTimestampUtc": "2014-12-11T11:37:42.0724391Z",
+              "VolumeTraded": 0.4,
+              "Price": 399.0,
+              "PrimaryCurrencyCode": "Xbt",
+              "SecondaryCurrencyCode": "Usd"
+            }
+          ],
+          "PageSize": 5,
+          "TotalItems": 20,
+          "TotalPages": 4
+        }
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetTrades"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'pageIndex=' + str(page_index),
+            'pageSize=' + str(page_size)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("pageIndex", page_index),
+            ("pageSize", page_size)
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
