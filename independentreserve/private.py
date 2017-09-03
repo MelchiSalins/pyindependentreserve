@@ -617,3 +617,45 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+
+    @http_exception_handler
+    def withdraw_digital_currency(self, amount, withdrawal_address, comment=""):
+        """
+        Creates a digital currency withdrawal request. There is a minimum withdrawal amount of XBT 0.001 or ETH 0.01,
+        except where the available balance is less than this amount. In all cases, the withdrawal amount must be greater
+        than the withdrawal fee. Take care to provide a valid destination address.
+        Bitcoin and Ether withdrawals are irreversible once sent.
+
+
+        :param amount: The amount of Bitcoin to withdraw.
+        :param withdrawal_address: Target Bitcoin or Ether withdrawal address.
+        :param comment: Withdrawal comment. Should not exceed 500 characters.
+        :return: null
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/WithdrawDigitalCurrency"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'amount=' + str(amount),
+            'withdrawalAddress=' + str(withdrawal_address),
+            'comment=' + str(comment)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("amount", str(amount)),
+            ("withdrawalAddress", str(withdrawal_address)),
+            ("comment", str(comment))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
+
