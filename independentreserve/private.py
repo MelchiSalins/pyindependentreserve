@@ -671,7 +671,7 @@ class PrivateMethods(Authentication):
             'nonce=' + str(nonce),
             'secondaryCurrencyCode=' + str(secondary_currency_code),
             'withdrawalAmount=' + str(withdrawal_amount),
-            'withdrawalBankAccountName=' + str(withdrawal_bank_account_name)
+            'withdrawalBankAccountName=' + str(withdrawal_bank_account_name),
             'comment=' + str(comment)
         ]
 
