@@ -225,3 +225,122 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+
+    @http_exception_handler
+    def get_closed_orders(self, primary_currency_code="Xbt", secondary_currency_code="Aud", page_index=1, page_size=50):
+        """
+
+        :param primary_currency_code: The primary currency of orders. This is an optional parameter.
+        :param secondary_currency_code: The secondary currency of orders. This is an optional parameter.
+        :param page_index: The page index. Must be greater or equal to 1
+        :param page_size: Must be greater or equal to 1 and less than or equal to 50.
+                          If a number greater than 50 is specified, then 50 will be used.
+        :return: dict
+
+        "PageSize": Number of orders shown per page
+        "TotalItems": Total number of closed orders
+        "TotalPages": Total number of pages
+        "Data":[ List of all open orders
+        {
+            "AvgPrice": Average price for all trades executed for the order
+            "CreatedTimestampUtc": UTC timestamp of when order was created
+            "FeePercent": Brokerage fee
+            "OrderGuid": Unique identifier of the order
+            "OrderType": Type of order,
+            "Outstanding": Unfilled volume still outstanding on this order
+            "Price": Order limit price in secondary currency
+            "PrimaryCurrencyCode": Primary currency of order
+            "SecondaryCurrencyCode": Secondary currency of order
+            "Status": Order status (Filled, PartiallyFilledAndCancelled, Cancelled, PartiallyFilledAndExpired, Expired)
+            "Value": The value of the order, denominated in secondary currency
+            "Volume": The original volume ordered
+        }]
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetClosedOrders"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'primaryCurrencyCode=' + str(primary_currency_code),
+            'secondaryCurrencyCode=' + str(secondary_currency_code),
+            'pageIndex=' + str(page_index),
+            'pageSize=' + str(page_size)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("primaryCurrencyCode", str(primary_currency_code)),
+            ("secondaryCurrencyCode", str(secondary_currency_code)),
+            ("pageIndex", page_index),
+            ("pageSize", page_size)
+        ])
+
+        response =  requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
+
+    @http_exception_handler
+    def get_closed_filled_orders(self, primary_currency_code="Xbt", secondary_currency_code="Aud",
+                                 page_index=1, page_size=50):
+        """
+
+        :param primary_currency_code: The primary currency of orders. This is an optional parameter.
+        :param secondary_currency_code: The secondary currency of orders. This is an optional parameter.
+        :param page_index: The page index. Must be greater or equal to 1
+        :param page_size: Must be greater or equal to 1 and less than or equal to 50.
+                          If a number greater than 50 is specified, then 50 will be used.
+        :return: dict
+
+        "PageSize": Number of orders shown per page
+        "TotalItems": Total number of closed orders
+        "TotalPages": Total number of pages
+        "Data":[ List of all open orders
+        {
+            "AvgPrice": Average price for all trades executed for the order
+            "CreatedTimestampUtc": UTC timestamp of when order was created
+            "FeePercent": Brokerage fee
+            "OrderGuid": Unique identifier of the order
+            "OrderType": Type of order,
+            "Outstanding": Unfilled volume still outstanding on this order
+            "Price": Order limit price in secondary currency
+            "PrimaryCurrencyCode": Primary currency of order
+            "SecondaryCurrencyCode": Secondary currency of order
+            "Status": Order status (Filled, PartiallyFilledAndCancelled, PartiallyFilledAndExpired)
+            "Value": The value of the order, denominated in secondary currency
+            "Volume": The original volume ordered
+        }]
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetClosedFilledOrders"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'primaryCurrencyCode=' + str(primary_currency_code),
+            'secondaryCurrencyCode=' + str(secondary_currency_code),
+            'pageIndex=' + str(page_index),
+            'pageSize=' + str(page_size)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("primaryCurrencyCode", str(primary_currency_code)),
+            ("secondaryCurrencyCode", str(secondary_currency_code)),
+            ("pageIndex", page_index),
+            ("pageSize", page_size)
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
