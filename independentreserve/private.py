@@ -486,3 +486,40 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+
+    @http_exception_handler
+    def get_digital_currency_deposit_address(self, primary_currency_code="Xbt"):
+        """
+        Retrieves the deposit address which should be used for new Bitcoin or Ether deposits.
+
+        :param primary_currency_code: The digital currency to generate deposit address for.
+        :return: dict
+
+        {
+            "DepositAddress":"12a7FbBzSGvJd36wNesAxAksLXMWm4oLUJ",
+            "LastCheckedTimestampUtc":"2014-05-05T09:35:22.4032405Z",
+            "NextUpdateTimestampUtc":"2014-05-05T09:45:22.4032405Z"
+        }
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetDigitalCurrencyDepositAddress"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'primaryCurrencyCode=' + str(primary_currency_code)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("primaryCurrencyCode", str(primary_currency_code))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
