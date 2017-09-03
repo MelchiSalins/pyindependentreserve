@@ -580,3 +580,40 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+
+    @http_exception_handler
+    def synch_digital_currency_deposit_address_with_blockchain(self, deposit_address):
+        """
+        Forces the deposit address to be checked for new Bitcoin or Ether deposits.
+
+        :param deposit_address: Bitcoin or Ether deposit address to check for new deposits.
+        :return: dict
+
+        {
+            "DepositAddress":"12a7FbBzSGvJd36wNesAxAksLXMWm4oLUJ",
+            "LastCheckedTimestampUtc":"2014-05-05T09:35:22.4032405Z",
+            "NextUpdateTimestampUtc":"2014-05-05T09:45:22.4032405Z"
+        }
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/SynchDigitalCurrencyDepositAddressWithBlockchain"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'depositAddress=' + str(deposit_address)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("depositAddress", str(deposit_address))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
