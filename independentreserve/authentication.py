@@ -1,9 +1,5 @@
-import requests
-import logging
-import time
-import hmac, hashlib
-import json
-from collections import OrderedDict
+import hmac
+import hashlib
 
 
 class Authentication(object):
