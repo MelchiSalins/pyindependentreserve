@@ -659,3 +659,34 @@ class PrivateMethods(Authentication):
 
         return response
 
+    @http_exception_handler
+    def request_fiat_withdrawal(self, withdrawal_amount, withdrawal_bank_account_name,
+                                secondary_currency_code="USD", comment=""):
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/RequestFiatWithdrawal"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'secondaryCurrencyCode=' + str(secondary_currency_code),
+            'withdrawalAmount=' + str(withdrawal_amount),
+            'withdrawalBankAccountName=' + str(withdrawal_bank_account_name)
+            'comment=' + str(comment)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("secondaryCurrencyCode", str(secondary_currency_code)),
+            ("withdrawalAmount", str(withdrawal_amount)),
+            ("withdrawalBankAccountName", str(withdrawal_bank_account_name)),
+            ("comment", str(comment))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
