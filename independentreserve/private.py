@@ -1,7 +1,8 @@
-import requests
-import hmac, hashlib
 import json
 import time
+
+import requests
+
 from collections import OrderedDict
 
 from .authentication import Authentication
@@ -85,7 +86,8 @@ class PrivateMethods(Authentication):
         return response
 
     @http_exception_handler
-    def place_market_order(self, volume, primary_currency_code="Xbt", secondary_currency_code="Aud", order_type="MarketBid"):
+    def place_market_order(self, volume, primary_currency_code="Xbt", secondary_currency_code="Aud",
+                           order_type="MarketBid"):
         """
         Place new market bid / offer order. A Market Bid is a buy order and a Market Offer is a sell order.
 
@@ -204,10 +206,10 @@ class PrivateMethods(Authentication):
             url,
             'apiKey=' + self.key,
             'nonce=' + str(nonce),
-            'primaryCurrencyCode='+str(primary_currency_code),
-            'secondaryCurrencyCode='+str(secondary_currency_code),
-            'pageIndex='+str(page_index),
-            'pageSize='+str(page_size)
+            'primaryCurrencyCode=' + str(primary_currency_code),
+            'secondaryCurrencyCode=' + str(secondary_currency_code),
+            'pageIndex=' + str(page_index),
+            'pageSize=' + str(page_size)
         ]
 
         signature = self._generate_signature(parameters)
@@ -281,7 +283,7 @@ class PrivateMethods(Authentication):
             ("pageSize", page_size)
         ])
 
-        response =  requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
 
@@ -337,6 +339,146 @@ class PrivateMethods(Authentication):
             ("signature", str(signature)),
             ("primaryCurrencyCode", str(primary_currency_code)),
             ("secondaryCurrencyCode", str(secondary_currency_code)),
+            ("pageIndex", page_index),
+            ("pageSize", page_size)
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
+
+    @http_exception_handler
+    def get_order_details(self, order_guid):
+        """
+        Retrieves details about a single order.
+
+        :param order_guid:The guid of the order.
+        :return: dict
+
+        {
+          "OrderGuid": "c7347e4c-b865-4c94-8f74-d934d4b0b177",
+          "CreatedTimestampUtc": "2014-09-23T12:39:34.3817763Z",
+          "Type": "MarketBid",
+          "VolumeOrdered": 5.0,
+          "VolumeFilled": 5.0,
+          "Price": null,
+          "AvgPrice": 100.0,
+          "ReservedAmount": 0.0,
+          "Status": "Filled",
+          "PrimaryCurrencyCode": "Xbt",
+          "SecondaryCurrencyCode": "Usd"
+        }
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetOrderDetails"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'orderGuid=' + str(order_guid)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("orderGuid", str(order_guid))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
+
+    @http_exception_handler
+    def get_accounts(self):
+        """
+        Retrieves information about your Independent Reserve accounts in digital and fiat currencies.
+
+        :return: list
+
+        [
+            {
+                "AccountGuid":"66dcac65-bf07-4e68-ad46-838f51100424",
+                "AccountStatus":"Active",
+                "AvailableBalance":45.33400000,
+                "CurrencyCode":"Xbt",
+                "TotalBalance":46.81000000
+            },
+            {
+                "AccountGuid":"49994921-60ec-411e-8a78-d0eba078d5e9",
+                "AccountStatus":"Active",
+                "AvailableBalance":14345.53000000,
+                "CurrencyCode":"Usd",
+                "TotalBalance":15784.07000000
+            }
+        ]
+        """
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetAccounts"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
+
+    @http_exception_handler
+    def get_transactions(self, account_guid, page_index=1, page_size=50):
+        """
+
+        Retrieves a page of a specified size, containing all trnasactions made on an account.
+
+        :param account_guid: The Guid of your Independent Reseve account.
+                             You can retrieve information about your accounts via the GetAccounts method.
+        :param page_index: The page index. Must be greater or equal to 1
+        :param page_size: Must be greater or equal to 1 and less than or equal to 50.
+                          If a number greater than 50 is specified, then 50 will be used.
+        :return:
+        """
+        # TODO: This function needs to be implemented to accept
+        # - to_date
+        # - from_date
+        # - txTypes
+        nonce = int(time.time())
+        url = "https://api.independentreserve.com/Private/GetTransactions"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce),
+            'accountGuid=' + str(account_guid),
+            # 'fromTimestampUtc=' + str(from_time),
+            # 'toTimestampUtc=' + str(to_time),
+            # 'txTypes=Brokerage,Trade',
+            'pageIndex=' + str(page_index),
+            'pageSize=' + str(page_size)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature)),
+            ("accountGuid", account_guid),
+            # ("fromTimestampUtc", from_time),
+            # ("toTimestampUtc", to_time),
+            # ("txTypes", "Brokerage,Trade"),
             ("pageIndex", page_index),
             ("pageSize", page_size)
         ])
