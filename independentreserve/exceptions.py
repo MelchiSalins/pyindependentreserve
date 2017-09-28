@@ -3,6 +3,18 @@ import logging
 
 
 def http_exception_handler(f):
+    
+    """
+    Logs error.
+    
+    :param error: error being logged
+    """
+    def log_error(error):
+        if hasattr(error, 'message'):
+            logging.error(error.message)
+        else:
+            logging.error(error)
+            
     """
     Decorator to keep try catch block dry for all API calls.
 
@@ -15,8 +27,10 @@ def http_exception_handler(f):
             response.raise_for_status()
             return response.json()
         except HTTPError as error:
-            logging.error(error.message)
+            log_error(error)
         except Exception as error:
-            logging.error(error.message)
-
+            log_error(error)
+            
     return wrapper
+    
+    
