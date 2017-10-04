@@ -1,5 +1,6 @@
 import json
 import time
+from datetime import datetime
 
 import requests
 
@@ -10,8 +11,8 @@ from .exceptions import http_exception_handler
 
 
 class PrivateMethods(Authentication):
-    def __init__(self, api_key, api_secret):
-        super(PrivateMethods, self).__init__(api_key, api_secret)
+    def __init__(self, api_key, api_secret, api_url = "https://api.independentreserve.com"):
+        super(PrivateMethods, self).__init__(api_key, api_secret, api_url)
 
     @http_exception_handler
     def place_limit_order(self, price, volume, primary_currency_code="Xbt",
@@ -54,7 +55,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/PlaceLimitOrder"
+        url = self.url + "/Private/PlaceLimitOrder"
 
         parameters = [
             url,
@@ -113,7 +114,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/PlaceMarketOrder"
+        url = self.url + "/Private/PlaceMarketOrder"
 
         parameters = [
             url,
@@ -170,7 +171,7 @@ class PrivateMethods(Authentication):
         """
 
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/CancelOrder"
+        url = self.url + "/Private/CancelOrder"
 
         parameters = [
             url,
@@ -200,7 +201,7 @@ class PrivateMethods(Authentication):
         """
 
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetOpenOrders"
+        url = self.url + "/Private/GetOpenOrders"
 
         parameters = [
             url,
@@ -259,7 +260,7 @@ class PrivateMethods(Authentication):
         }]
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetClosedOrders"
+        url = self.url + "/Private/GetClosedOrders"
 
         parameters = [
             url,
@@ -319,7 +320,7 @@ class PrivateMethods(Authentication):
         }]
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetClosedFilledOrders"
+        url = self.url + "/Private/GetClosedFilledOrders"
 
         parameters = [
             url,
@@ -370,7 +371,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetOrderDetails"
+        url = self.url + "/Private/GetOrderDetails"
 
         parameters = [
             url,
@@ -417,7 +418,7 @@ class PrivateMethods(Authentication):
         ]
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetAccounts"
+        url = self.url + "/Private/GetAccounts"
 
         parameters = [
             url,
@@ -438,33 +439,44 @@ class PrivateMethods(Authentication):
         return response
 
     @http_exception_handler
-    def get_transactions(self, account_guid, page_index=1, page_size=50):
+    def get_transactions(self, account_guid, from_date = datetime(1970,1,1), to_date= datetime(1970,1,1), transaction_types = '', page_index=1, page_size=50):
         """
 
         Retrieves a page of a specified size, containing all trnasactions made on an account.
 
         :param account_guid: The Guid of your Independent Reseve account.
                              You can retrieve information about your accounts via the GetAccounts method.
+        :param from_date: The optional start date (UTC) to retrieve transactions.
+        :param to_date: The optional end date (UTC) to retrieve transactions.
+        :param transaction_types: The optional list of transaction types to filter result.
         :param page_index: The page index. Must be greater or equal to 1
         :param page_size: Must be greater or equal to 1 and less than or equal to 50.
                           If a number greater than 50 is specified, then 50 will be used.
         :return:
         """
-        # TODO: This function needs to be implemented to accept
-        # - to_date
-        # - from_date
-        # - txTypes
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetTransactions"
-
+        url = self.url + "/Private/GetTransactions"
+        
+        fromTimestampUtc = ""
+        if from_date != None:
+            fromTimestampUtc = from_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+        toTimestampUtc = ""
+        if to_date != None:
+            toTimestampUtc = to_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+        txTypes = ""
+        txTypesData=""
+        if transaction_types != None:
+            txTypes = ','.join(transaction_types)
+            txTypesData = transaction_types
+            
         parameters = [
             url,
             'apiKey=' + self.key,
             'nonce=' + str(nonce),
             'accountGuid=' + str(account_guid),
-            # 'fromTimestampUtc=' + str(from_time),
-            # 'toTimestampUtc=' + str(to_time),
-            # 'txTypes=Brokerage,Trade',
+            'fromTimestampUtc=' + fromTimestampUtc,
+            'toTimestampUtc=' + toTimestampUtc,
+            'txTypes=' + txTypes,
             'pageIndex=' + str(page_index),
             'pageSize=' + str(page_size)
         ]
@@ -476,13 +488,13 @@ class PrivateMethods(Authentication):
             ("nonce", nonce),
             ("signature", str(signature)),
             ("accountGuid", account_guid),
-            # ("fromTimestampUtc", from_time),
-            # ("toTimestampUtc", to_time),
-            # ("txTypes", "Brokerage,Trade"),
+            ("fromTimestampUtc", fromTimestampUtc),
+            ("toTimestampUtc", toTimestampUtc),
+            ("txTypes", txTypesData),
             ("pageIndex", page_index),
             ("pageSize", page_size)
         ])
-
+        
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
@@ -502,7 +514,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetDigitalCurrencyDepositAddress"
+        url = self.url + "/Private/GetDigitalCurrencyDepositAddress"
 
         parameters = [
             url,
@@ -555,7 +567,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetDigitalCurrencyDepositAddresses"
+        url = self.url + "/Private/GetDigitalCurrencyDepositAddresses"
 
         parameters = [
             url,
@@ -596,7 +608,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/SynchDigitalCurrencyDepositAddressWithBlockchain"
+        url = self.url + "/Private/SynchDigitalCurrencyDepositAddressWithBlockchain"
 
         parameters = [
             url,
@@ -633,7 +645,7 @@ class PrivateMethods(Authentication):
         :return: null
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/WithdrawDigitalCurrency"
+        url = self.url + "/Private/WithdrawDigitalCurrency"
 
         parameters = [
             url,
@@ -663,7 +675,7 @@ class PrivateMethods(Authentication):
     def request_fiat_withdrawal(self, withdrawal_amount, withdrawal_bank_account_name,
                                 secondary_currency_code="USD", comment=""):
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/RequestFiatWithdrawal"
+        url = self.url + "/Private/RequestFiatWithdrawal"
 
         parameters = [
             url,
@@ -733,7 +745,7 @@ class PrivateMethods(Authentication):
         }
         """
         nonce = int(time.time())
-        url = "https://api.independentreserve.com/Private/GetTrades"
+        url = self.url + "/Private/GetTrades"
 
         parameters = [
             url,

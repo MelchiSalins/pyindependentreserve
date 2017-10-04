@@ -14,6 +14,10 @@ $ python
 >>> connection = ir.PublicMethods()
 >>> connection.get_valid_limit_order_types()
 [u'LimitBid', u'LimitOffer'] 
+
+>>> api = PrivateMethods("your_api_key", "your_api_secret")
+>>> api.get_open_orders()
+{'TotalItems': ... etc
 ```
 
 # Support

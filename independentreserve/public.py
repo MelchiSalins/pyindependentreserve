@@ -11,8 +11,15 @@ class PublicMethods(object):
     """
     Python wrapper for API endpoint documented at https://www.independentreserve.com/API#public
     """
+    
+    """
+    Independent Reserve API Url.
+    Can override this for testing purposes.
+    """
+    api_url = "https://api.independentreserve.com"
 
-    def __init__(self):
+    def __init__(self, api_url = "https://api.independentreserve.com"):
+        PublicMethods.api_url = api_url
         pass
 
     @staticmethod
@@ -26,7 +33,7 @@ class PublicMethods(object):
 
         :return: list
         """
-        response = requests.get("https://api.independentreserve.com/Public/GetValidPrimaryCurrencyCodes")
+        response = requests.get(PublicMethods.api_url + "/Public/GetValidPrimaryCurrencyCodes")
         return response
 
     @staticmethod
@@ -40,7 +47,7 @@ class PublicMethods(object):
 
         ["Usd","Aud", "Nzd"]
         """
-        response = requests.get("https://api.independentreserve.com/Public/GetValidSecondaryCurrencyCodes")
+        response = requests.get(PublicMethods.api_url + "/Public/GetValidSecondaryCurrencyCodes")
         return response
 
     @staticmethod
@@ -53,7 +60,7 @@ class PublicMethods(object):
 
         ["LimitBid","LimitOffer"]
         """
-        response = requests.get("https://api.independentreserve.com/Public/GetValidLimitOrderTypes")
+        response = requests.get(PublicMethods.api_url + "/Public/GetValidLimitOrderTypes")
         return response
 
     @staticmethod
@@ -66,7 +73,20 @@ class PublicMethods(object):
 
         ["MarketBid","MarketOffer"]
         """
-        response = requests.get("https://api.independentreserve.com/Public/GetValidMarketOrderTypes")
+        response = requests.get(PublicMethods.api_url + "/Public/GetValidMarketOrderTypes")
+        return response
+        
+    @staticmethod
+    @http_exception_handler
+    def get_valid_order_types():
+        """
+        Returns a list of valid order types which can be placed onto the Independent Reserve exchange platform.
+
+        :return: list
+
+        ["LimitBid","LimitOffer","MarketBid","MarketOffer"]
+        """
+        response = requests.get(PublicMethods.api_url + "/Public/GetValidOrderTypes")
         return response
 
     @staticmethod
@@ -87,7 +107,7 @@ class PublicMethods(object):
          u'Withdrawal',
          u'WithdrawalFee']
         """
-        response = requests.get("https://api.independentreserve.com/Public/GetValidTransactionTypes")
+        response = requests.get(PublicMethods.api_url + "/Public/GetValidTransactionTypes")
         return response
 
     @staticmethod
@@ -133,7 +153,7 @@ class PublicMethods(object):
 
         """
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetMarketSummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(
+            PublicMethods.api_url + "/Public/GetMarketSummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(
                 primary_currency_code, secondary_currency_code))
         return response
 
@@ -179,7 +199,7 @@ class PublicMethods(object):
         }
         """
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetOrderBook?primaryCurrencyCode={0}&secondaryCurrencyCode={1}"
+            PublicMethods.api_url + "/Public/GetOrderBook?primaryCurrencyCode={0}&secondaryCurrencyCode={1}"
                 .format(primary_currency_code, secondary_currency_code))
         return response
 
@@ -239,7 +259,7 @@ class PublicMethods(object):
         """
 
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetTradeHistorySummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfHoursInThePastToRetrieve={2}".format(
+            PublicMethods.api_url + "/Public/GetTradeHistorySummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfHoursInThePastToRetrieve={2}".format(
                 primary_currency_code, secondary_currency_code, hours)
         )
         return response
@@ -296,7 +316,7 @@ class PublicMethods(object):
         """
 
         response = requests.get(
-            "https://api.independentreserve.com/Public/GetRecentTrades?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfRecentTradesToRetrieve={2}".format(
+            PublicMethods.api_url + "/Public/GetRecentTrades?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfRecentTradesToRetrieve={2}".format(
                 primary_currency_code, secondary_currency_code, number_of_trades)
         )
         return response
@@ -310,5 +330,5 @@ class PublicMethods(object):
 
         :return: list
         """
-        response = requests.get("https://api.independentreserve.com/Public/GetFxRates")
+        response = requests.get(PublicMethods.api_url + "/Public/GetFxRates")
         return response
