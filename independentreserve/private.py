@@ -768,3 +768,46 @@ class PrivateMethods(Authentication):
         response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
 
         return response
+        
+    @http_exception_handler
+    def get_brokerage_fees(self):
+        """
+        Retrieves information about the trading fees for the digital currencies in your Independent Reserve account.
+
+        :return:
+
+        [
+          {
+            "CurrencyCode": "Xbt",
+            "Fee": 0.005
+          },
+          {
+            "CurrencyCode": "Eth",
+            "Fee": 0.005
+          },
+          {
+            "CurrencyCode": "Bch",
+            "Fee": 0.014
+          }
+        ]           
+        """
+        nonce = int(time.time())
+        url = self.url + "/Private/GetBrokerageFees"
+
+        parameters = [
+            url,
+            'apiKey=' + self.key,
+            'nonce=' + str(nonce)
+        ]
+
+        signature = self._generate_signature(parameters)
+
+        data = OrderedDict([
+            ("apiKey", self.key),
+            ("nonce", nonce),
+            ("signature", str(signature))
+        ])
+
+        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+
+        return response
