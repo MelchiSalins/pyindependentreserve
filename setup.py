@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 setup(name="pyindependentreserve",
-      version="0.1.0",
+      version="0.2.0",
       description="Python client for Interacting with Independent Reserve API - The Bitcoin and Digital Currency Market",
       url="https://github.com/MelchiSalins/pyindependentreserve",
       classifiers=[
