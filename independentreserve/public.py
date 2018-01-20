@@ -209,13 +209,20 @@ class PublicMethods(object):
         """
         Returns summarised historical trading data for a given currency pair. Data is summarised into 1 hour intervals.
 
-        :param primary_currency_code: The digital currency for which to retrieve trade history. Must be a valid primary currency, which can be checked via the GetValidPrimaryCurrencyCodes method.
-        :param secondary_currency_code: The fiat currency in which to retrieve trade history. Must be a valid secondary currency, which can be checked via the GetValidSecondaryCurrencyCodes method.
+        :param primary_currency_code: The digital currency for which to retrieve trade history.
+                                      Must be a valid primary currency, which can be checked via the
+                                      GetValidPrimaryCurrencyCodes method.
+        :param secondary_currency_code: The fiat currency in which to retrieve trade history.
+
+                                        Must be a valid secondary currency, which can be checked via the
+                                        GetValidSecondaryCurrencyCodes method.
+        :param hours: The time period in hours to get trade history.
         :return: dict
 
         Notes
 
-        This method caches return values for 30 minutes. Calling it more than once per 30 minutes will result in cached data being returned.
+        This method caches return values for 30 minutes. Calling it more than once per 30 minutes will result in cached
+        data being returned.
 
         {
            "CreatedTimestampUtc ":"2014-08-05T09:02:57.5440691Z",

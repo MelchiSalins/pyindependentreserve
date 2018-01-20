@@ -4,6 +4,8 @@ Python client for Interacting with Independent Reserve API - The Bitcoin and Dig
 # Install 
 ```bash
 $ pip install pyindependentreserve
+(OR)
+$ pip3 install pyindependentreserve
 ```
 
 

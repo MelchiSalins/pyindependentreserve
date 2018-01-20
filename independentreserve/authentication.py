@@ -4,7 +4,8 @@ import hashlib
 
 class Authentication(object):
     """
-    All private API methods require authentication. All method parameters (except signature) are required to authenticate a request. There are three additional parameters which should be passed to private API methods:
+    All private API methods require authentication. All method parameters (except signature) are required to
+    authenticate a request. There are three additional parameters which should be passed to private API methods:
 
     API Key
     Nonce
