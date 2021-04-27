@@ -22,6 +22,8 @@ $ python
 
 # Usage Websocket
 pyindependentreserve uses python3 asyncio module to implement a producer consumer pattern to consume messages from the websocket. 
+
+Official websocket documentation can be found here: https://github.com/independentreserve/websockets
 ```python
 from asyncio.queues import Queue
 import websockets
