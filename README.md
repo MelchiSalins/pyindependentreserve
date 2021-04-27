@@ -4,12 +4,10 @@ Python client for Interacting with Independent Reserve API - The Bitcoin and Dig
 # Install 
 ```bash
 $ pip install pyindependentreserve
-(OR)
-$ pip3 install pyindependentreserve
 ```
 
 
-# Usage
+# Usage REST API
 ```python
 $ python
 >>> import independentreserve as ir
@@ -20,6 +18,38 @@ $ python
 >>> api = PrivateMethods("your_api_key", "your_api_secret")
 >>> api.get_open_orders()
 {'TotalItems': ... etc
+```
+
+# Usage Websocket
+pyindependentreserve uses python3 asyncio module to implement a producer consumer pattern to consume messages from the websocket. 
+```python
+from asyncio.queues import Queue
+import websockets
+import asyncio
+import sys
+
+from independentreserve import wss_subscribe
+
+
+async def consumer(queue: asyncio.Queue):
+    while True:
+        item = await queue.get()
+        if item is None:
+            break
+        print("consuming item: {}".format(item))
+
+
+if __name__ == "__main__":
+    try:
+        loop = asyncio.get_event_loop()
+        queue = asyncio.Queue(1000)
+        producer_coroutine = wss_subscribe(queue=queue, channel_name=["ticker-xbt-aud"])
+        consumer_coroutine = consumer(queue=queue)
+        loop.run_until_complete(asyncio.gather(producer_coroutine, consumer_coroutine))
+        loop.close()
+    except Exception as error:
+        print(error)
+        sys.exit(1)
 ```
 
 # Support
