@@ -1,1 +1,2 @@
 requests==2.20.0
+websockets==8.1.0

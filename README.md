@@ -1,15 +1,16 @@
+
 # pyindependentreserve
-Python client for Interacting with Independent Reserve API - The Bitcoin and Digital Currency Market
+
+Python3 client for Interacting with Independent Reserve API - The Bitcoin and Digital Currency Market
 
 # Install 
+
 ```bash
 $ pip install pyindependentreserve
-(OR)
-$ pip3 install pyindependentreserve
 ```
 
+# Usage REST API
 
-# Usage
 ```python
 $ python
 >>> import independentreserve as ir
@@ -22,12 +23,48 @@ $ python
 {'TotalItems': ... etc
 ```
 
+# Usage Websocket
+
+pyindependentreserve uses python3 asyncio module to implement a producer consumer pattern to consume messages from the websocket. 
+
+Official websocket documentation can be found [here](https://github.com/independentreserve/websockets)
+
+```python
+from asyncio.queues import Queue
+import websockets
+import asyncio
+import sys
+
+from independentreserve import wss_subscribe
+
+
+async def consumer(queue: asyncio.Queue):
+    while True:
+        item = await queue.get()
+        if item is None:
+            break
+        print("consuming item: {}".format(item))
+
+
+if __name__ == "__main__":
+    try:
+        loop = asyncio.get_event_loop()
+        queue = asyncio.Queue(1000)
+        producer_coroutine = wss_subscribe(queue=queue, channel_name=["ticker-xbt-aud"])
+        consumer_coroutine = consumer(queue=queue)
+        loop.run_until_complete(asyncio.gather(producer_coroutine, consumer_coroutine))
+        loop.close()
+    except Exception as error:
+        print(error)
+        sys.exit(1)
+```
+
 # Support
 
 If you like this project and would want to support it please consider taking a look
 at the issues section at:
 
-https://github.com/MelchiSalins/pyindependentreserve/issues
+[Github Issues](https://github.com/MelchiSalins/pyindependentreserve/issues)
 
 or consider donating to
 

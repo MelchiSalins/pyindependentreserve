@@ -10,16 +10,16 @@ class Authentication(object):
     API Key
     Nonce
     Signature
-    
+
     API Url can be overridden for testing purposes.
     """
 
     def __init__(self, api_key, api_secret, api_url):
-        
+
         self.key = api_key
         self.secret = api_secret
         # self.nonce = int(time.time())
-        self.headers = {'Content-Type': 'application/json'}
+        self.headers = {"Content-Type": "application/json"}
 
         self.url = api_url
 
@@ -30,9 +30,15 @@ class Authentication(object):
         :param parameters: Query params that get passed to the URL
         :return:
         """
-        message = ','.join(parameters)
+        message = ",".join(parameters)
 
-        signature = hmac.new(self.secret.encode('utf-8'),
-                             msg=message.encode('utf-8'),
-                             digestmod=hashlib.sha256).hexdigest().upper()
+        signature = (
+            hmac.new(
+                self.secret.encode("utf-8"),
+                msg=message.encode("utf-8"),
+                digestmod=hashlib.sha256,
+            )
+            .hexdigest()
+            .upper()
+        )
         return signature

@@ -11,3 +11,4 @@ Fiat currency amounts cannot have more than 2 decimal places, and XBT amounts ca
 from .public import *
 from .authentication import *
 from .private import *
+from .websocket import *
