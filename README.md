@@ -1,13 +1,16 @@
+
 # pyindependentreserve
-Python client for Interacting with Independent Reserve API - The Bitcoin and Digital Currency Market
+
+Python3 client for Interacting with Independent Reserve API - The Bitcoin and Digital Currency Market
 
 # Install 
+
 ```bash
 $ pip install pyindependentreserve
 ```
 
-
 # Usage REST API
+
 ```python
 $ python
 >>> import independentreserve as ir
@@ -21,9 +24,11 @@ $ python
 ```
 
 # Usage Websocket
+
 pyindependentreserve uses python3 asyncio module to implement a producer consumer pattern to consume messages from the websocket. 
 
-Official websocket documentation can be found here: https://github.com/independentreserve/websockets
+Official websocket documentation can be found [here](https://github.com/independentreserve/websockets)
+
 ```python
 from asyncio.queues import Queue
 import websockets
@@ -59,7 +64,7 @@ if __name__ == "__main__":
 If you like this project and would want to support it please consider taking a look
 at the issues section at:
 
-https://github.com/MelchiSalins/pyindependentreserve/issues
+[Github Issues](https://github.com/MelchiSalins/pyindependentreserve/issues)
 
 or consider donating to
 

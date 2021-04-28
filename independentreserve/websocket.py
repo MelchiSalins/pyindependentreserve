@@ -4,8 +4,6 @@ import sys
 
 from pprint import pprint as pp
 
-WSS_URL = f"wss://websockets.independentreserve.com?subscribe="
-
 
 async def _pull_data(queue: asyncio.Queue):
     async with websockets.connect(WSS_URL) as websocket:
