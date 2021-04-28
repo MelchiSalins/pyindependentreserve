@@ -11,14 +11,14 @@ class PublicMethods(object):
     """
     Python wrapper for API endpoint documented at https://www.independentreserve.com/API#public
     """
-    
+
     """
     Independent Reserve API Url.
     Can override this for testing purposes.
     """
     api_url = "https://api.independentreserve.com"
 
-    def __init__(self, api_url = "https://api.independentreserve.com"):
+    def __init__(self, api_url="https://api.independentreserve.com"):
         PublicMethods.api_url = api_url
         pass
 
@@ -33,7 +33,9 @@ class PublicMethods(object):
 
         :return: list
         """
-        response = requests.get(PublicMethods.api_url + "/Public/GetValidPrimaryCurrencyCodes")
+        response = requests.get(
+            PublicMethods.api_url + "/Public/GetValidPrimaryCurrencyCodes"
+        )
         return response
 
     @staticmethod
@@ -47,7 +49,9 @@ class PublicMethods(object):
 
         ["Usd","Aud", "Nzd"]
         """
-        response = requests.get(PublicMethods.api_url + "/Public/GetValidSecondaryCurrencyCodes")
+        response = requests.get(
+            PublicMethods.api_url + "/Public/GetValidSecondaryCurrencyCodes"
+        )
         return response
 
     @staticmethod
@@ -60,7 +64,9 @@ class PublicMethods(object):
 
         ["LimitBid","LimitOffer"]
         """
-        response = requests.get(PublicMethods.api_url + "/Public/GetValidLimitOrderTypes")
+        response = requests.get(
+            PublicMethods.api_url + "/Public/GetValidLimitOrderTypes"
+        )
         return response
 
     @staticmethod
@@ -73,9 +79,11 @@ class PublicMethods(object):
 
         ["MarketBid","MarketOffer"]
         """
-        response = requests.get(PublicMethods.api_url + "/Public/GetValidMarketOrderTypes")
+        response = requests.get(
+            PublicMethods.api_url + "/Public/GetValidMarketOrderTypes"
+        )
         return response
-        
+
     @staticmethod
     @http_exception_handler
     def get_valid_order_types():
@@ -107,7 +115,9 @@ class PublicMethods(object):
          u'Withdrawal',
          u'WithdrawalFee']
         """
-        response = requests.get(PublicMethods.api_url + "/Public/GetValidTransactionTypes")
+        response = requests.get(
+            PublicMethods.api_url + "/Public/GetValidTransactionTypes"
+        )
         return response
 
     @staticmethod
@@ -153,8 +163,11 @@ class PublicMethods(object):
 
         """
         response = requests.get(
-            PublicMethods.api_url + "/Public/GetMarketSummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(
-                primary_currency_code, secondary_currency_code))
+            PublicMethods.api_url
+            + "/Public/GetMarketSummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(
+                primary_currency_code, secondary_currency_code
+            )
+        )
         return response
 
     @staticmethod
@@ -199,13 +212,18 @@ class PublicMethods(object):
         }
         """
         response = requests.get(
-            PublicMethods.api_url + "/Public/GetOrderBook?primaryCurrencyCode={0}&secondaryCurrencyCode={1}"
-                .format(primary_currency_code, secondary_currency_code))
+            PublicMethods.api_url
+            + "/Public/GetOrderBook?primaryCurrencyCode={0}&secondaryCurrencyCode={1}".format(
+                primary_currency_code, secondary_currency_code
+            )
+        )
         return response
 
     @staticmethod
     @http_exception_handler
-    def get_trade_history_summary(primary_currency_code="Xbt", secondary_currency_code="Aud", hours="240"):
+    def get_trade_history_summary(
+        primary_currency_code="Xbt", secondary_currency_code="Aud", hours="240"
+    ):
         """
         Returns summarised historical trading data for a given currency pair. Data is summarised into 1 hour intervals.
 
@@ -266,14 +284,18 @@ class PublicMethods(object):
         """
 
         response = requests.get(
-            PublicMethods.api_url + "/Public/GetTradeHistorySummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfHoursInThePastToRetrieve={2}".format(
-                primary_currency_code, secondary_currency_code, hours)
+            PublicMethods.api_url
+            + "/Public/GetTradeHistorySummary?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfHoursInThePastToRetrieve={2}".format(
+                primary_currency_code, secondary_currency_code, hours
+            )
         )
         return response
 
     @staticmethod
     @http_exception_handler
-    def get_recent_trades(primary_currency_code="Xbt", secondary_currency_code="Aud", number_of_trades=50):
+    def get_recent_trades(
+        primary_currency_code="Xbt", secondary_currency_code="Aud", number_of_trades=50
+    ):
         """
 
         :param primary_currency_code: The digital currency for which to retrieve recent trades.
@@ -323,8 +345,10 @@ class PublicMethods(object):
         """
 
         response = requests.get(
-            PublicMethods.api_url + "/Public/GetRecentTrades?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfRecentTradesToRetrieve={2}".format(
-                primary_currency_code, secondary_currency_code, number_of_trades)
+            PublicMethods.api_url
+            + "/Public/GetRecentTrades?primaryCurrencyCode={0}&secondaryCurrencyCode={1}&numberOfRecentTradesToRetrieve={2}".format(
+                primary_currency_code, secondary_currency_code, number_of_trades
+            )
         )
         return response
 

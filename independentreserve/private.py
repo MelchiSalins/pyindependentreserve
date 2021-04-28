@@ -11,12 +11,20 @@ from .exceptions import http_exception_handler
 
 
 class PrivateMethods(Authentication):
-    def __init__(self, api_key, api_secret, api_url = "https://api.independentreserve.com"):
+    def __init__(
+        self, api_key, api_secret, api_url="https://api.independentreserve.com"
+    ):
         super(PrivateMethods, self).__init__(api_key, api_secret, api_url)
 
     @http_exception_handler
-    def place_limit_order(self, price, volume, primary_currency_code="Xbt",
-                          secondary_currency_code="Aud", order_type="LimitBid"):
+    def place_limit_order(
+        self,
+        price,
+        volume,
+        primary_currency_code="Xbt",
+        secondary_currency_code="Aud",
+        order_type="LimitBid",
+    ):
         """
 
         :param price: The price in secondary currency to buy/sell.
@@ -59,36 +67,45 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code),
-            'secondaryCurrencyCode=' + str(secondary_currency_code),
-            'orderType=' + str(order_type),
-            'price=' + str(price),
-            'volume=' + str(volume)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
+            "secondaryCurrencyCode=" + str(secondary_currency_code),
+            "orderType=" + str(order_type),
+            "price=" + str(price),
+            "volume=" + str(volume),
         ]
 
         signature = self._generate_signature(parameters)
 
         # Collection order has to be in the same order as parameters
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code)),
-            ("secondaryCurrencyCode", str(secondary_currency_code)),
-            ("orderType", order_type),
-            ("price", price),
-            ("volume", volume)
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+                ("secondaryCurrencyCode", str(secondary_currency_code)),
+                ("orderType", order_type),
+                ("price", price),
+                ("volume", volume),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def place_market_order(self, volume, primary_currency_code="Xbt", secondary_currency_code="Aud",
-                           order_type="MarketBid"):
+    def place_market_order(
+        self,
+        volume,
+        primary_currency_code="Xbt",
+        secondary_currency_code="Aud",
+        order_type="MarketBid",
+    ):
         """
         Place new market bid / offer order. A Market Bid is a buy order and a Market Offer is a sell order.
 
@@ -118,27 +135,31 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code),
-            'secondaryCurrencyCode=' + str(secondary_currency_code),
-            'orderType=' + str(order_type),
-            'volume=' + str(volume)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
+            "secondaryCurrencyCode=" + str(secondary_currency_code),
+            "orderType=" + str(order_type),
+            "volume=" + str(volume),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code)),
-            ("secondaryCurrencyCode", str(secondary_currency_code)),
-            ("orderType", order_type),
-            ("volume", volume)
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+                ("secondaryCurrencyCode", str(secondary_currency_code)),
+                ("orderType", order_type),
+                ("volume", volume),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -175,26 +196,36 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'orderGuid=' + str(order_guid)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "orderGuid=" + str(order_guid),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("orderGuid", str(order_guid))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("orderGuid", str(order_guid)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def get_open_orders(self, primary_currency_code="Xbt", secondary_currency_code="Aud", page_index=1, page_size=10):
+    def get_open_orders(
+        self,
+        primary_currency_code="Xbt",
+        secondary_currency_code="Aud",
+        page_index=1,
+        page_size=10,
+    ):
         """
         Retrieves a page of a specified size, with your currently Open and Partially Filled orders.
         :return:
@@ -205,32 +236,42 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code),
-            'secondaryCurrencyCode=' + str(secondary_currency_code),
-            'pageIndex=' + str(page_index),
-            'pageSize=' + str(page_size)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
+            "secondaryCurrencyCode=" + str(secondary_currency_code),
+            "pageIndex=" + str(page_index),
+            "pageSize=" + str(page_size),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code)),
-            ("secondaryCurrencyCode", str(secondary_currency_code)),
-            ("pageIndex", page_index),
-            ("pageSize", page_size)
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+                ("secondaryCurrencyCode", str(secondary_currency_code)),
+                ("pageIndex", page_index),
+                ("pageSize", page_size),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def get_closed_orders(self, primary_currency_code="Xbt", secondary_currency_code="Aud", page_index=1, page_size=50):
+    def get_closed_orders(
+        self,
+        primary_currency_code="Xbt",
+        secondary_currency_code="Aud",
+        page_index=1,
+        page_size=50,
+    ):
         """
 
         :param primary_currency_code: The primary currency of orders. This is an optional parameter.
@@ -264,33 +305,42 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code),
-            'secondaryCurrencyCode=' + str(secondary_currency_code),
-            'pageIndex=' + str(page_index),
-            'pageSize=' + str(page_size)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
+            "secondaryCurrencyCode=" + str(secondary_currency_code),
+            "pageIndex=" + str(page_index),
+            "pageSize=" + str(page_size),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code)),
-            ("secondaryCurrencyCode", str(secondary_currency_code)),
-            ("pageIndex", page_index),
-            ("pageSize", page_size)
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+                ("secondaryCurrencyCode", str(secondary_currency_code)),
+                ("pageIndex", page_index),
+                ("pageSize", page_size),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def get_closed_filled_orders(self, primary_currency_code="Xbt", secondary_currency_code="Aud",
-                                 page_index=1, page_size=50):
+    def get_closed_filled_orders(
+        self,
+        primary_currency_code="Xbt",
+        secondary_currency_code="Aud",
+        page_index=1,
+        page_size=50,
+    ):
         """
 
         :param primary_currency_code: The primary currency of orders. This is an optional parameter.
@@ -324,27 +374,31 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code),
-            'secondaryCurrencyCode=' + str(secondary_currency_code),
-            'pageIndex=' + str(page_index),
-            'pageSize=' + str(page_size)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
+            "secondaryCurrencyCode=" + str(secondary_currency_code),
+            "pageIndex=" + str(page_index),
+            "pageSize=" + str(page_size),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code)),
-            ("secondaryCurrencyCode", str(secondary_currency_code)),
-            ("pageIndex", page_index),
-            ("pageSize", page_size)
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+                ("secondaryCurrencyCode", str(secondary_currency_code)),
+                ("pageIndex", page_index),
+                ("pageSize", page_size),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -375,21 +429,25 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'orderGuid=' + str(order_guid)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "orderGuid=" + str(order_guid),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("orderGuid", str(order_guid))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("orderGuid", str(order_guid)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -420,26 +478,34 @@ class PrivateMethods(Authentication):
         nonce = int(time.time())
         url = self.url + "/Private/GetAccounts"
 
-        parameters = [
-            url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce)
-        ]
+        parameters = [url, "apiKey=" + self.key, "nonce=" + str(nonce)]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def get_transactions(self, account_guid, from_date = datetime(1970,1,1), to_date= datetime(1970,1,1), transaction_types = '', page_index=1, page_size=50):
+    def get_transactions(
+        self,
+        account_guid,
+        from_date=datetime(1970, 1, 1),
+        to_date=datetime(1970, 1, 1),
+        transaction_types="",
+        page_index=1,
+        page_size=50,
+    ):
         """
 
         Retrieves a page of a specified size, containing all trnasactions made on an account.
@@ -456,7 +522,7 @@ class PrivateMethods(Authentication):
         """
         nonce = int(time.time())
         url = self.url + "/Private/GetTransactions"
-        
+
         fromTimestampUtc = ""
         if from_date != None:
             fromTimestampUtc = from_date.strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -464,38 +530,42 @@ class PrivateMethods(Authentication):
         if to_date != None:
             toTimestampUtc = to_date.strftime("%Y-%m-%dT%H:%M:%SZ")
         txTypes = ""
-        txTypesData=""
+        txTypesData = ""
         if transaction_types != None:
-            txTypes = ','.join(transaction_types)
+            txTypes = ",".join(transaction_types)
             txTypesData = transaction_types
-            
+
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'accountGuid=' + str(account_guid),
-            'fromTimestampUtc=' + fromTimestampUtc,
-            'toTimestampUtc=' + toTimestampUtc,
-            'txTypes=' + txTypes,
-            'pageIndex=' + str(page_index),
-            'pageSize=' + str(page_size)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "accountGuid=" + str(account_guid),
+            "fromTimestampUtc=" + fromTimestampUtc,
+            "toTimestampUtc=" + toTimestampUtc,
+            "txTypes=" + txTypes,
+            "pageIndex=" + str(page_index),
+            "pageSize=" + str(page_size),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("accountGuid", account_guid),
-            ("fromTimestampUtc", fromTimestampUtc),
-            ("toTimestampUtc", toTimestampUtc),
-            ("txTypes", txTypesData),
-            ("pageIndex", page_index),
-            ("pageSize", page_size)
-        ])
-        
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("accountGuid", account_guid),
+                ("fromTimestampUtc", fromTimestampUtc),
+                ("toTimestampUtc", toTimestampUtc),
+                ("txTypes", txTypesData),
+                ("pageIndex", page_index),
+                ("pageSize", page_size),
+            ]
+        )
+
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -518,26 +588,32 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def get_digital_currency_deposit_addresses(self, primary_currency_code="Xbt", page_index=1, page_size=50):
+    def get_digital_currency_deposit_addresses(
+        self, primary_currency_code="Xbt", page_index=1, page_size=50
+    ):
         """
         Retrieves a page of digital currency deposit addresses which have been assigned to your account.
 
@@ -571,25 +647,29 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'primaryCurrencyCode=' + str(primary_currency_code),
-            'pageIndex=' + str(page_index),
-            'pageSize=' + str(page_size)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "primaryCurrencyCode=" + str(primary_currency_code),
+            "pageIndex=" + str(page_index),
+            "pageSize=" + str(page_size),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("primaryCurrencyCode", str(primary_currency_code)),
-            ("pageIndex", str(page_index)),
-            ("pageSize", str(page_size))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("primaryCurrencyCode", str(primary_currency_code)),
+                ("pageIndex", str(page_index)),
+                ("pageSize", str(page_size)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -612,21 +692,25 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'depositAddress=' + str(deposit_address)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "depositAddress=" + str(deposit_address),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("depositAddress", str(deposit_address))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("depositAddress", str(deposit_address)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -649,57 +733,70 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'amount=' + str(amount),
-            'withdrawalAddress=' + str(withdrawal_address),
-            'comment=' + str(comment)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "amount=" + str(amount),
+            "withdrawalAddress=" + str(withdrawal_address),
+            "comment=" + str(comment),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("amount", str(amount)),
-            ("withdrawalAddress", str(withdrawal_address)),
-            ("comment", str(comment))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("amount", str(amount)),
+                ("withdrawalAddress", str(withdrawal_address)),
+                ("comment", str(comment)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
     @http_exception_handler
-    def request_fiat_withdrawal(self, withdrawal_amount, withdrawal_bank_account_name,
-                                secondary_currency_code="USD", comment=""):
+    def request_fiat_withdrawal(
+        self,
+        withdrawal_amount,
+        withdrawal_bank_account_name,
+        secondary_currency_code="USD",
+        comment="",
+    ):
         nonce = int(time.time())
         url = self.url + "/Private/RequestFiatWithdrawal"
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'secondaryCurrencyCode=' + str(secondary_currency_code),
-            'withdrawalAmount=' + str(withdrawal_amount),
-            'withdrawalBankAccountName=' + str(withdrawal_bank_account_name),
-            'comment=' + str(comment)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "secondaryCurrencyCode=" + str(secondary_currency_code),
+            "withdrawalAmount=" + str(withdrawal_amount),
+            "withdrawalBankAccountName=" + str(withdrawal_bank_account_name),
+            "comment=" + str(comment),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("secondaryCurrencyCode", str(secondary_currency_code)),
-            ("withdrawalAmount", str(withdrawal_amount)),
-            ("withdrawalBankAccountName", str(withdrawal_bank_account_name)),
-            ("comment", str(comment))
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("secondaryCurrencyCode", str(secondary_currency_code)),
+                ("withdrawalAmount", str(withdrawal_amount)),
+                ("withdrawalBankAccountName", str(withdrawal_bank_account_name)),
+                ("comment", str(comment)),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
 
@@ -749,26 +846,30 @@ class PrivateMethods(Authentication):
 
         parameters = [
             url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce),
-            'pageIndex=' + str(page_index),
-            'pageSize=' + str(page_size)
+            "apiKey=" + self.key,
+            "nonce=" + str(nonce),
+            "pageIndex=" + str(page_index),
+            "pageSize=" + str(page_size),
         ]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature)),
-            ("pageIndex", page_index),
-            ("pageSize", page_size)
-        ])
+        data = OrderedDict(
+            [
+                ("apiKey", self.key),
+                ("nonce", nonce),
+                ("signature", str(signature)),
+                ("pageIndex", page_index),
+                ("pageSize", page_size),
+            ]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
-        
+
     @http_exception_handler
     def get_brokerage_fees(self):
         """
@@ -789,25 +890,21 @@ class PrivateMethods(Authentication):
             "CurrencyCode": "Bch",
             "Fee": 0.014
           }
-        ]           
+        ]
         """
         nonce = int(time.time())
         url = self.url + "/Private/GetBrokerageFees"
 
-        parameters = [
-            url,
-            'apiKey=' + self.key,
-            'nonce=' + str(nonce)
-        ]
+        parameters = [url, "apiKey=" + self.key, "nonce=" + str(nonce)]
 
         signature = self._generate_signature(parameters)
 
-        data = OrderedDict([
-            ("apiKey", self.key),
-            ("nonce", nonce),
-            ("signature", str(signature))
-        ])
+        data = OrderedDict(
+            [("apiKey", self.key), ("nonce", nonce), ("signature", str(signature))]
+        )
 
-        response = requests.post(url, data=json.dumps(data, sort_keys=False), headers=self.headers)
+        response = requests.post(
+            url, data=json.dumps(data, sort_keys=False), headers=self.headers
+        )
 
         return response
