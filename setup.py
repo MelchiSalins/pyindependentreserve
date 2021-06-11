@@ -18,7 +18,7 @@ setup(
     author_email="melchisalins@gmail.com",
     license="MIT",
     packages=find_packages(),
-    install_requires=["requests==2.20.0", "websockets==8.1.0"],
+    install_requires=["requests==2.20.0", "websockets==9.1"],
     include_package_data=True,
     zip_safe=True,
 )
