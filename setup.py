@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="pyindependentreserve",
-    version="0.3.0",
+    version="0.3.1",
     description="Python client for Interacting with Independent Reserve API - The Bitcoin and Digital Currency Market",
     long_description=open("README.md", "r").read(),
     long_description_content_type="text/markdown",
@@ -18,7 +18,7 @@ setup(
     author_email="melchisalins@gmail.com",
     license="MIT",
     packages=find_packages(),
-    install_requires=["requests==2.31.0", "websockets==9.1"],
+    install_requires=["requests>=2.22.0", "websockets==9.1"],
     include_package_data=True,
     zip_safe=True,
 )
