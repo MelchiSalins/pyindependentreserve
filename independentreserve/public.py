@@ -363,3 +363,14 @@ class PublicMethods(object):
         """
         response = requests.get(PublicMethods.api_url + "/Public/GetFxRates")
         return response
+
+    @staticmethod
+    @http_exception_handler
+    def get_order_minimum_volumes():
+        """
+        Returns a list of minimum allowed volumes for orders.
+
+        :return: dict
+        """
+        response = requests.get(PublicMethods.api_url + "/Public/GetOrderMinimumVolumes")
+        return response
