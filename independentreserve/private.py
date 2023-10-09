@@ -502,7 +502,7 @@ class PrivateMethods(Authentication):
         account_guid,
         from_date=datetime(1970, 1, 1),
         to_date=datetime(1970, 1, 1),
-        transaction_types="",
+        transaction_types=["Trades", "Brokerage"],
         page_index=1,
         page_size=50,
     ):
