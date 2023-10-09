@@ -33,7 +33,20 @@ jobs:
           python setup.py sdist bdist_wheel
         # retrieve your distributions here
 
+      - name: Store distributions
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+      
+      - name: Download distributions
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist/
+
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.8.0
+        uses: pypa/gh-action-pypi-publish@v1.8.10
         with:
           password: ${{ secrets.PYPI_TOKEN }}
+          repository_url: https://upload.pypi.org/legacy/
