@@ -501,8 +501,8 @@ class PrivateMethods(Authentication):
         self,
         account_guid,
         from_date=datetime(1970, 1, 1),
-        to_date=datetime(1970, 1, 1),
-        transaction_types=["Trades", "Brokerage"],
+        to_date=datetime.now(),
+        transaction_types=["Trade", "Brokerage"],
         page_index=1,
         page_size=50,
     ):
